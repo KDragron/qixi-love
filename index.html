@@ -325,14 +325,14 @@ body { background: linear-gradient(135deg, #ffebe6 0%, #ffd9d0 50%, #f3c7cc 100%
     <div class="card-img" id="coupleImg">
       <img src="scene_images/couple_qixi.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
     </div>
-    <div class="card-title">致 敏宝</div>
+    <div class="card-title">致 XX</div>
     <div class="card-divider"></div>
     <div class="card-text">遇见你的那天，风是暖的，光也是柔的。
 
 谢谢你出现在我的生命里，让平凡的日子有了星光。和你相处的每一刻，我都觉得自己是幸运的——幸运有人愿意听我讲无聊的事，幸运有人记得我随口说过的喜好，幸运有人陪我走过春的温柔、夏的热烈、秋的沉静和冬的安宁。
 
-敏宝，七夕快乐。愿往后的每一个三百六十五天，都有你。</div>
-    <div class="card-signature">——爱你的馗</div>
+XX，七夕快乐。愿往后的每一个三百六十五天，都有你。</div>
+    <div class="card-signature">——XX</div>
   </div>
   <div class="btn-container">
     <button class="btn" id="btnLoveWords">想对你说的话</button>
@@ -399,27 +399,27 @@ const loveWords = [
 
 const memories = [
   { title: "第一次一起住酒店", date: "2026-06-06", image: "scene_hotel.jpg", text: "第一次一起住酒店，外面的风景很美，我无心观看，只顾着跟你亲热。" },
-  { title: "第一次给敏宝做饭", date: "2026-05-27", image: "scene_cooking.jpg", text: "厨房里手忙脚乱，带给你吃，你吃得一脸满足，说很符合你的胃口。" },
-  { title: "第一次在敏宝家过夜", date: "2026-05-23", image: "scene_overnight.jpg", text: "在你家的第一晚，我惊喜又紧张。" },
-  { title: "第一次来松岗", date: "2026-05-10", image: "scene_travel.jpg", text: "你来到我住的松岗，一起走在我每天走过的路上，感觉咱俩更亲近了。" },
+  { title: "第一次给XX做饭", date: "2026-05-27", image: "scene_cooking.jpg", text: "厨房里手忙脚乱，带给你吃，你吃得一脸满足，说很符合你的胃口。" },
+  { title: "第一次在XX家过夜", date: "2026-05-23", image: "scene_overnight.jpg", text: "在你家的第一晚，我惊喜又紧张。" },
+  { title: "第一次来XX", date: "2026-05-10", image: "scene_travel.jpg", text: "你来到我住的XX，一起走在我每天走过的路上，感觉咱俩更亲近了。" },
   { title: "第一次一起足疗", date: "2026-04-30", image: "scene_spa.jpg", text: "你说走路走累了，去放松一下，我闪过😍的念头，原来只是按摩足疗。" },
   { title: "第一次接吻", date: "2026-04-26", image: "scene_kiss.jpg", text: "那天在KTV，生日你给我准备惊喜，你抱着我，我没忍住吻了你，你没躲开。" },
-  { title: "第一次牵手", date: "2026-04-19", image: "scene_handhold.jpg", text: "走在大仟里商场里路上，我鼓起勇气牵了你的手，你没挣开，我偷偷开心了一整晚。" },
-  { title: "第一次去下水径", date: "2026-04-12", image: "scene_food.jpg", text: "我去你的下水径，你带我吃八合里火锅，下水径是你的秘密基地，慢慢是我的了，是我们的了。" },
+  { title: "第一次牵手", date: "2026-04-19", image: "scene_handhold.jpg", text: "走在XX商场里路上，我鼓起勇气牵了你的手，你没挣开，我偷偷开心了一整晚。" },
+  { title: "第一次去XX", date: "2026-04-12", image: "scene_food.jpg", text: "我去你的XX，你带我吃XX火锅，XX是你的秘密基地，慢慢是我的了，是我们的了。" },
   { title: "第一次约会", date: "2026-03-28", image: "scene_date.jpg", text: "第一次正式约会，一起吃的胡桃里，那天的菜不太好吃，你却格外温柔。" },
   { title: "第一次见面", date: "2026-03-22", image: "scene_meet.jpg", text: "青藤匹配后的第一次见面，你比照片上好看，我紧张得话都说不利索，微信都不给加，哼。" },
   { title: "青藤APP匹配", date: "2026-03-03", image: "scene_match.jpg", text: "在青藤上刷到你，看了你的资料，觉得我们一定会很合拍。鼓起勇气发了消息。" }
 ];
 
 const surpriseThemes = [
-  { key: "sakura", cls: "theme-sakura", name: "樱花之约", icon: "🌸", title: "樱 花 之 约", body: "敏宝\n愿与你共度每一个春天\n看繁花落尽，听风声细语\n\n🌸 愿时光不老，我们不散 🌸", btn: "收下这份浪漫" },
-  { key: "lantern", cls: "theme-lantern", name: "孔明灯许愿", icon: "🏮", title: "孔 明 灯 许 愿", body: "敏宝\n每一盏灯都是我对你的祝福\n愿它们带着我的爱\n飞到你身边\n\n🏮 七夕之夜，愿你所愿皆成 🏮", btn: "点亮我的夜空" },
-  { key: "meteor", cls: "theme-meteor", name: "流星许愿", icon: "🌠", title: "流 星 许 愿", body: "敏宝\n看到流星的那一刻\n我许的愿望是——\n愿你永远在我身边\n\n🌠 愿愿望成真 🌠", btn: "接住我的愿望" },
-  { key: "magpie", cls: "theme-magpie", name: "鹊桥相会", icon: "🕊", title: "鹊 桥 相 会", body: "敏宝\n纵使银河万里\n也挡不住我对你的思念\n愿我们如牛郎织女\n年年相见，岁岁相守\n\n🕊 两情若是久长时，又岂在朝朝暮暮 🕊", btn: "跨越银河拥抱你" },
-  { key: "firework", cls: "theme-firework", name: "烟花表白", icon: "🎆", title: "烟 花 表 白", body: "敏宝\n这漫天烟火\n每一束都是我对你的爱\n如果爱有形状\n那一定是心形\n\n🎆 七夕快乐，我的宝贝 🎆", btn: "点燃我的心意" },
-  { key: "redthread", cls: "theme-redthread", name: "红线缘", icon: "🧵", title: "红 线 缘 定", body: "敏宝\n月老红线系你我\n愿此生执子之手\n共赴山海\n\n❤️ 余生很长\n请多指教 ❤️", btn: "牵起你的红线" },
-  { key: "galaxy", cls: "theme-galaxy", name: "银河星桥", icon: "🌌", title: "银 河 星 桥", body: "敏宝\n纵使银河万里\n星光作桥\n愿奔赴你身旁\n\n✨ 愿为你\n跨越星河万里 ✨", btn: "跨越星河拥抱你" },
-  { key: "flower", cls: "theme-flower", name: "花海誓言", icon: "🌸", title: "花 海 誓 言", body: "敏宝\n在最美的年华遇见妳\n愿以花海为证\n许下一生誓言\n\n💗 愿执子之手\n与子偕老 💗", btn: "收下我的誓言" }
+  { key: "sakura", cls: "theme-sakura", name: "樱花之约", icon: "🌸", title: "樱 花 之 约", body: "XX\n愿与你共度每一个春天\n看繁花落尽，听风声细语\n\n🌸 愿时光不老，我们不散 🌸", btn: "收下这份浪漫" },
+  { key: "lantern", cls: "theme-lantern", name: "孔明灯许愿", icon: "🏮", title: "孔 明 灯 许 愿", body: "XX\n每一盏灯都是我对你的祝福\n愿它们带着我的爱\n飞到你身边\n\n🏮 七夕之夜，愿你所愿皆成 🏮", btn: "点亮我的夜空" },
+  { key: "meteor", cls: "theme-meteor", name: "流星许愿", icon: "🌠", title: "流 星 许 愿", body: "XX\n看到流星的那一刻\n我许的愿望是——\n愿你永远在我身边\n\n🌠 愿愿望成真 🌠", btn: "接住我的愿望" },
+  { key: "magpie", cls: "theme-magpie", name: "鹊桥相会", icon: "🕊", title: "鹊 桥 相 会", body: "XX\n纵使银河万里\n也挡不住我对你的思念\n愿我们如牛郎织女\n年年相见，岁岁相守\n\n🕊 两情若是久长时，又岂在朝朝暮暮 🕊", btn: "跨越银河拥抱你" },
+  { key: "firework", cls: "theme-firework", name: "烟花表白", icon: "🎆", title: "烟 花 表 白", body: "XX\n这漫天烟火\n每一束都是我对你的爱\n如果爱有形状\n那一定是心形\n\n🎆 七夕快乐，XX 🎆", btn: "点燃我的心意" },
+  { key: "redthread", cls: "theme-redthread", name: "红线缘", icon: "🧵", title: "红 线 缘 定", body: "XX\n月老红线系你我\n愿此生执子之手\n共赴山海\n\n❤️ 余生很长\n请多指教 ❤️", btn: "牵起你的红线" },
+  { key: "galaxy", cls: "theme-galaxy", name: "银河星桥", icon: "🌌", title: "银 河 星 桥", body: "XX\n纵使银河万里\n星光作桥\n愿奔赴你身旁\n\n✨ 愿为你\n跨越星河万里 ✨", btn: "跨越星河拥抱你" },
+  { key: "flower", cls: "theme-flower", name: "花海誓言", icon: "🌸", title: "花 海 誓 言", body: "XX\n在最美的年华遇见妳\n愿以花海为证\n许下一生誓言\n\n💗 愿执子之手\n与子偕老 💗", btn: "收下我的誓言" }
 ];
 
 // ===== 工具函数 =====

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>七夕 · 愿得一心人</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+body { background: linear-gradient(135deg, #ffebe6 0%, #ffd9d0 50%, #f3c7cc 100%); }
+
+#app { position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+/* ===== 启动页 ===== */
+#launch {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #ffebe6 0%, #ffd9d0 50%, #f3c7cc 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 100;
+}
+.launch-heart { font-size: 50px; color: rgba(240,120,140,0.9); opacity: 0; margin-bottom: 20px; }
+.launch-slogan { font-size: 36px; font-weight: 300; color: #733d4d; opacity: 0; letter-spacing: 4px; }
+.launch-sub { font-size: 14px; color: rgba(120,65,75,0.8); opacity: 0; margin-top: 20px; }
+.launch-heart.beat { animation: heartBeat 0.5s ease-in-out infinite alternate; }
+@keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+/* ===== 主界面 ===== */
+#main {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #ffebe6 0%, #ffd9d0 50%, #f3c7cc 100%);
+  display: flex; flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.card {
+  margin: 10px 16px 0;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 12px 25px rgba(128,77,77,0.12);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.card-img {
+  width: 100%;
+  aspect-ratio: 100 / 55;
+  background: 
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.7) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(255,220,210,0.5) 0%, transparent 60%),
+    linear-gradient(135deg, #ffd4c8 0%, #ffb8c4 40%, #f5a0b8 80%, #e890b0 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.card-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.4) 0%, transparent 55%);
+}
+.card-title {
+  font-size: 20px; font-weight: 600; color: #66384a;
+  text-align: center; margin: 12px 16px 6px;
+}
+.card-divider {
+  width: 40px; height: 2.5px; margin: 0 auto;
+  background: rgba(242,127,153,0.5); border-radius: 1.5px;
+}
+.card-text {
+  font-size: 14px; line-height: 1.7; color: #593844;
+  padding: 10px 18px 0;
+  white-space: pre-line;
+}
+.card-signature {
+  font-size: 13px; font-weight: 300; color: rgba(140,89,102,0.8);
+  text-align: right; padding: 10px 18px 15px;
+}
+
+/* ===== 按钮 ===== */
+.btn-container {
+  display: flex; flex-direction: column;
+  padding: 10px 16px 20px;
+  gap: 18px;
+  flex: 1;
+  justify-content: center;
+}
+.btn {
+  height: 46px; border: none; border-radius: 22px;
+  background: rgba(242,127,153,0.9);
+  color: #fff; font-size: 15px; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+  box-shadow: 0 5px 10px rgba(200,80,100,0.15);
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+.btn:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(200,80,100,0.15); }
+
+/* ===== 弹窗通用 ===== */
+.popup-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+.popup-overlay.show { opacity: 1; pointer-events: auto; }
+
+.popup {
+  background: #fff; border-radius: 24px;
+  width: 88%;
+  padding: 20px 20px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  text-align: center;
+  transform: scale(0.7); opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.6,0,0.2,1), opacity 0.4s;
+}
+.popup-overlay.show .popup { transform: scale(1); opacity: 1; }
+
+.popup-icon { font-size: 40px; margin-bottom: 6px; }
+.popup-title { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+.popup-divider { width: 60px; height: 2px; margin: 0 auto 12px; border-radius: 2px; }
+.popup-body { font-size: 15px; line-height: 1.8; color: #4d2634; white-space: pre-line; margin-bottom: 16px; }
+.popup-btn {
+  height: 44px; border: none; border-radius: 22px;
+  color: #fff; font-size: 15px; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+  padding: 0 20px;
+}
+
+/* 情话弹窗 */
+.love-popup .popup { max-width: 300px; padding: 20px 25px 20px; }
+.love-popup .popup-icon { display: none; }
+.love-popup .popup-title { display: none; }
+.love-popup .popup-divider {
+  width: 40px; height: 4px; margin: 0 auto 12px;
+  background: rgba(242,127,153,0.8); border-radius: 2px;
+}
+.love-popup .heart-icon {
+  font-size: 28px; color: rgba(242,115,135,0.9);
+  text-align: center; margin: 8px 0 14px;
+}
+.love-popup .popup-body {
+  font-size: 17px; line-height: 1.7; color: #593844;
+  padding: 0 5px;
+}
+.love-popup .popup-btn {
+  height: 44px; width: 140px; margin: 20px auto 0;
+  background: rgba(242,127,153,0.9);
+}
+
+/* 回忆弹窗 */
+.memory-popup .popup-btn { background: rgba(255,140,51,1); }
+.memory-popup .days-badge {
+  display: inline-block;
+  background: rgba(255,140,51,1);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  width: 90px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 22px;
+  box-shadow: 0 4px 8px rgba(255,100,30,0.4);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.memory-popup .memory-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.memory-popup .memory-title-row::before,
+.memory-popup .memory-title-row::after {
+  content: '';
+  width: 25px;
+  height: 3px;
+  background: rgba(255,153,115,0.55);
+  border-radius: 2px;
+  margin: 0 6px;
+}
+.memory-popup .memory-title-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #66384a;
+}
+.memory-popup .memory-scene {
+  width: calc(100% - 32px);
+  height: 180px;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,153,115,0.3);
+}
+.memory-popup .memory-text {
+  font-size: 14px; line-height: 1.7; color: #593844;
+  padding: 0 18px;
+  white-space: pre-line;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* ===== 惊喜页面 ===== */
+.surprise {
+  position: absolute; inset: 0; z-index: 150;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.surprise.show { opacity: 1; pointer-events: auto; }
+.surprise canvas { position: absolute; inset: 0; }
+.surprise-message {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  width: 80%;
+  background: rgba(255,255,255,0.96);
+  border-radius: 24px;
+  padding: 18px 18px 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.6,0,0.2,1), opacity 0.3s;
+}
+.surprise-message.show { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+.surprise-message .sm-icon { font-size: 40px; margin-bottom: 4px; }
+.surprise-message .sm-title { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+.surprise-message .sm-divider { width: 60px; height: 2px; margin: 0 auto 12px; border-radius: 2px; }
+.surprise-message .sm-body { font-size: 15px; line-height: 1.8; color: #4d2634; white-space: pre-line; margin-bottom: 16px; }
+.surprise-message .sm-btn {
+  height: 42px; border: none; border-radius: 21px;
+  color: #fff; font-size: 14px; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+  width: 200px;
+}
+
+/* 樱花主题 */
+.theme-sakura { background: linear-gradient(180deg, #ffe0eb 0%, #ffbfd9 50%, #faa6c7 100%); }
+.theme-sakura .sm-title { color: #f25779; }
+.theme-sakura .sm-divider { background: rgba(242,87,121,0.4); }
+.theme-sakura .sm-btn { background: linear-gradient(90deg, #f25779, #e880aa); }
+
+/* 孔明灯主题 */
+.theme-lantern { background: linear-gradient(180deg, #050314 0%, #0d0526 40%, #140a38 70%, #1a0d2e 100%); }
+.theme-lantern .sm-title { color: #e64026; }
+.theme-lantern .sm-divider { background: rgba(230,64,38,0.4); }
+.theme-lantern .sm-btn { background: linear-gradient(90deg, #e64026, #f28b40); }
+
+/* 流星主题 */
+.theme-meteor { background: linear-gradient(180deg, #03031a 0%, #080533 40%, #0f0859 70%, #140a66 100%); }
+.theme-meteor .sm-title { color: #4d7ad9; }
+.theme-meteor .sm-divider { background: rgba(77,122,217,0.4); }
+.theme-meteor .sm-btn { background: linear-gradient(90deg, #4d7ad9, #8058cc); }
+
+/* 鹊桥主题 */
+.theme-magpie { background: linear-gradient(180deg, #05031f 0%, #0a0558 40%, #120a61 70%, #0d0a40 100%); }
+.theme-magpie .sm-title { color: #8c59bf; }
+.theme-magpie .sm-divider { background: rgba(140,89,191,0.4); }
+.theme-magpie .sm-btn { background: linear-gradient(90deg, #8c59bf, #cc5999); }
+
+/* 烟花主题 */
+.theme-firework { background: linear-gradient(180deg, #400a1a 0%, #661426 50%, #992640 100%); }
+.theme-firework .sm-title { color: #f2406e; }
+.theme-firework .sm-divider { background: rgba(242,64,110,0.4); }
+.theme-firework .sm-btn { background: linear-gradient(90deg, #f2406e, #e880a6); }
+
+/* 红线缘主题 */
+.theme-redthread { background: linear-gradient(180deg, #400a1a 0%, #661426 50%, #992640 100%); }
+.theme-redthread .sm-title { color: #d92640; }
+.theme-redthread .sm-divider { background: rgba(217,38,64,0.4); }
+.theme-redthread .sm-btn { background: linear-gradient(90deg, #d92640, #ff728c); }
+
+/* 银河桥主题 */
+.theme-galaxy { background: linear-gradient(180deg, #0d051f 0%, #1a0d40 40%, #331559 70%, #0d0526 100%); }
+.theme-galaxy .sm-title { color: #4d2699; }
+.theme-galaxy .sm-divider { background: rgba(77,38,153,0.4); }
+.theme-galaxy .sm-btn { background: linear-gradient(90deg, #4d2699, #8c59d9); }
+
+/* 花海主题 */
+.theme-flower { background: linear-gradient(180deg, #fff0f2 0%, #ffd1e0 40%, #f2b3cc 70%, #e08cb3 100%); }
+.theme-flower .sm-title { color: #d94080; }
+.theme-flower .sm-divider { background: rgba(217,64,128,0.4); }
+.theme-flower .sm-btn { background: linear-gradient(90deg, #d94080, #ff8cb2); }
+
+/* 页面过渡 */
+.page-fade { animation: pageFade 0.3s ease-out; }
+@keyframes pageFade { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+/* 回忆场景背景色 */
+.scene-hotel { background: linear-gradient(135deg, #ffe4d8, #ffc8b8); }
+.scene-cooking { background: linear-gradient(135deg, #ffe8d8, #ffd4b8); }
+.scene-overnight { background: linear-gradient(135deg, #d8d8f0, #b8b8e0); }
+.scene-travel { background: linear-gradient(135deg, #d8e8ff, #b8d0ff); }
+.scene-spa { background: linear-gradient(135deg, #ffe4ec, #ffc8dc); }
+.scene-kiss { background: linear-gradient(135deg, #ffd8e4, #ffb8d0); }
+.scene-handhold { background: linear-gradient(135deg, #ffe8e0, #ffd4c4); }
+.scene-meet { background: linear-gradient(135deg, #fff0d8, #ffe0b8); }
+.scene-date { background: linear-gradient(135deg, #ffd8e8, #ffb8d8); }
+.scene-match { background: linear-gradient(135deg, #f0e8ff, #d8ccff); }
+
+/* 响应式 */
+@media (max-height: 650px) {
+  .card-text { font-size: 13px; line-height: 1.6; }
+  .btn-container { gap: 14px; padding: 8px 16px 12px; }
+  .memory-popup .memory-scene { height: 150px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- 启动页 -->
+<div id="launch">
+  <div class="launch-heart" id="launchHeart">♥</div>
+  <div class="launch-slogan" id="launchSlogan">愿得一心人</div>
+  <div class="launch-sub" id="launchSub">七夕 · 愿与你共度</div>
+</div>
+
+<!-- 主界面 -->
+<div id="main" style="display:none;">
+  <div class="card">
+    <div class="card-img" id="coupleImg">
+      <img src="scene_images/couple_qixi.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    </div>
+    <div class="card-title">致 敏宝</div>
+    <div class="card-divider"></div>
+    <div class="card-text">遇见你的那天，风是暖的，光也是柔的。
+
+谢谢你出现在我的生命里，让平凡的日子有了星光。和你相处的每一刻，我都觉得自己是幸运的——幸运有人愿意听我讲无聊的事，幸运有人记得我随口说过的喜好，幸运有人陪我走过春的温柔、夏的热烈、秋的沉静和冬的安宁。
+
+敏宝，七夕快乐。愿往后的每一个三百六十五天，都有你。</div>
+    <div class="card-signature">——爱你的馗</div>
+  </div>
+  <div class="btn-container">
+    <button class="btn" id="btnLoveWords">想对你说的话</button>
+    <button class="btn" id="btnMemories">我们的点滴</button>
+    <button class="btn" id="btnSurprise">小惊喜</button>
+  </div>
+</div>
+
+<!-- 情话弹窗 -->
+<div class="popup-overlay love-popup" id="lovePopup">
+  <div class="popup">
+    <div class="popup-divider"></div>
+    <div class="heart-icon">♥</div>
+    <div class="popup-body" id="loveWordText"></div>
+    <button class="popup-btn" id="lovePopupBtn">收下这份心意</button>
+  </div>
+</div>
+
+<!-- 回忆弹窗 -->
+<div class="popup-overlay memory-popup" id="memoryPopup">
+  <div class="popup">
+    <div class="days-badge" id="memoryDaysBadge">0 天</div>
+    <div class="memory-title-row">
+      <span class="memory-title-text" id="memoryTitle">第一次见面</span>
+    </div>
+    <div class="memory-scene" id="memoryScene">
+      <img id="memorySceneImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:16px;display:none;">
+    </div>
+    <div class="popup-body memory-text" id="memoryText"></div>
+    <button class="popup-btn" id="memoryPopupBtn">收下这份回忆</button>
+  </div>
+</div>
+
+<!-- 惊喜页面容器 -->
+<div class="surprise" id="surpriseContainer">
+  <canvas id="surpriseCanvas"></canvas>
+  <div class="surprise-message" id="surpriseMsg">
+    <div class="sm-icon" id="smIcon">🌸</div>
+    <div class="sm-title" id="smTitle">樱花之约</div>
+    <div class="sm-divider" id="smDivider"></div>
+    <div class="sm-body" id="smBody"></div>
+    <button class="sm-btn" id="smBtn"></button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== 数据 =====
+const loveWords = [
+  "和你在一起的每一天，都是我的节日。",
+  "遇见你，是我这辈子最浪漫的事。",
+  "不用刻意想念，因为你一直在心里。",
+  "愿做你身边最温柔的依靠。",
+  "有你的日子里，平凡也闪闪发光。",
+  "世界很大，遇见你真好。",
+  "往后余生，风雪是你，平淡是你，清贫是你，荣华是你。",
+  "愿得一心人，白首不相离。",
+  "被你偏爱的日子，是我最骄傲的时光。",
+  "遇见你之后，我才明白什么叫心动。",
+  "喜欢你这件事，不分四季，不讲道理。",
+  "愿成为你，也愿你成为更好的自己。"
+];
+
+const memories = [
+  { title: "第一次一起住酒店", date: "2026-06-06", image: "scene_hotel.jpg", text: "第一次一起住酒店，外面的风景很美，我无心观看，只顾着跟你亲热。" },
+  { title: "第一次给敏宝做饭", date: "2026-05-27", image: "scene_cooking.jpg", text: "厨房里手忙脚乱，带给你吃，你吃得一脸满足，说很符合你的胃口。" },
+  { title: "第一次在敏宝家过夜", date: "2026-05-23", image: "scene_overnight.jpg", text: "在你家的第一晚，我惊喜又紧张。" },
+  { title: "第一次来松岗", date: "2026-05-10", image: "scene_travel.jpg", text: "你来到我住的松岗，一起走在我每天走过的路上，感觉咱俩更亲近了。" },
+  { title: "第一次一起足疗", date: "2026-04-30", image: "scene_spa.jpg", text: "你说走路走累了，去放松一下，我闪过😍的念头，原来只是按摩足疗。" },
+  { title: "第一次接吻", date: "2026-04-26", image: "scene_kiss.jpg", text: "那天在KTV，生日你给我准备惊喜，你抱着我，我没忍住吻了你，你没躲开。" },
+  { title: "第一次牵手", date: "2026-04-19", image: "scene_handhold.jpg", text: "走在大仟里商场里路上，我鼓起勇气牵了你的手，你没挣开，我偷偷开心了一整晚。" },
+  { title: "第一次去下水径", date: "2026-04-12", image: "scene_food.jpg", text: "我去你的下水径，你带我吃八合里火锅，下水径是你的秘密基地，慢慢是我的了，是我们的了。" },
+  { title: "第一次约会", date: "2026-03-28", image: "scene_date.jpg", text: "第一次正式约会，一起吃的胡桃里，那天的菜不太好吃，你却格外温柔。" },
+  { title: "第一次见面", date: "2026-03-22", image: "scene_meet.jpg", text: "青藤匹配后的第一次见面，你比照片上好看，我紧张得话都说不利索，微信都不给加，哼。" },
+  { title: "青藤APP匹配", date: "2026-03-03", image: "scene_match.jpg", text: "在青藤上刷到你，看了你的资料，觉得我们一定会很合拍。鼓起勇气发了消息。" }
+];
+
+const surpriseThemes = [
+  { key: "sakura", cls: "theme-sakura", name: "樱花之约", icon: "🌸", title: "樱 花 之 约", body: "敏宝\n愿与你共度每一个春天\n看繁花落尽，听风声细语\n\n🌸 愿时光不老，我们不散 🌸", btn: "收下这份浪漫" },
+  { key: "lantern", cls: "theme-lantern", name: "孔明灯许愿", icon: "🏮", title: "孔 明 灯 许 愿", body: "敏宝\n每一盏灯都是我对你的祝福\n愿它们带着我的爱\n飞到你身边\n\n🏮 七夕之夜，愿你所愿皆成 🏮", btn: "点亮我的夜空" },
+  { key: "meteor", cls: "theme-meteor", name: "流星许愿", icon: "🌠", title: "流 星 许 愿", body: "敏宝\n看到流星的那一刻\n我许的愿望是——\n愿你永远在我身边\n\n🌠 愿愿望成真 🌠", btn: "接住我的愿望" },
+  { key: "magpie", cls: "theme-magpie", name: "鹊桥相会", icon: "🕊", title: "鹊 桥 相 会", body: "敏宝\n纵使银河万里\n也挡不住我对你的思念\n愿我们如牛郎织女\n年年相见，岁岁相守\n\n🕊 两情若是久长时，又岂在朝朝暮暮 🕊", btn: "跨越银河拥抱你" },
+  { key: "firework", cls: "theme-firework", name: "烟花表白", icon: "🎆", title: "烟 花 表 白", body: "敏宝\n这漫天烟火\n每一束都是我对你的爱\n如果爱有形状\n那一定是心形\n\n🎆 七夕快乐，我的宝贝 🎆", btn: "点燃我的心意" },
+  { key: "redthread", cls: "theme-redthread", name: "红线缘", icon: "🧵", title: "红 线 缘 定", body: "敏宝\n月老红线系你我\n愿此生执子之手\n共赴山海\n\n❤️ 余生很长\n请多指教 ❤️", btn: "牵起你的红线" },
+  { key: "galaxy", cls: "theme-galaxy", name: "银河星桥", icon: "🌌", title: "银 河 星 桥", body: "敏宝\n纵使银河万里\n星光作桥\n愿奔赴你身旁\n\n✨ 愿为你\n跨越星河万里 ✨", btn: "跨越星河拥抱你" },
+  { key: "flower", cls: "theme-flower", name: "花海誓言", icon: "🌸", title: "花 海 誓 言", body: "敏宝\n在最美的年华遇见妳\n愿以花海为证\n许下一生誓言\n\n💗 愿执子之手\n与子偕老 💗", btn: "收下我的誓言" }
+];
+
+// ===== 工具函数 =====
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+function daysBetween(dateStr) {
+  const d = new Date(dateStr);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const ds = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return Math.floor((today - ds) / (1000 * 60 * 60 * 24));
+}
+
+// ===== 启动页动画 =====
+const launchHeart = document.getElementById('launchHeart');
+const launchSlogan = document.getElementById('launchSlogan');
+const launchSub = document.getElementById('launchSub');
+
+setTimeout(() => {
+  launchSlogan.style.transition = 'opacity 0.6s ease-in';
+  launchSub.style.transition = 'opacity 0.6s ease-in';
+  launchHeart.style.transition = 'opacity 0.6s ease-in';
+  launchSlogan.style.opacity = '1';
+  launchSub.style.opacity = '1';
+  launchHeart.style.opacity = '1';
+}, 150);
+
+setTimeout(() => { launchHeart.classList.add('beat'); }, 750);
+
+setTimeout(() => {
+  const launch = document.getElementById('launch');
+  launch.style.transition = 'opacity 0.25s';
+  launch.style.opacity = '0';
+  setTimeout(() => {
+    launch.style.display = 'none';
+    const main = document.getElementById('main');
+    main.style.display = 'flex';
+    main.classList.add('page-fade');
+  }, 250);
+}, 1700);
+
+// ===== 顺序循环 =====
+let memoryIndex = 0;
+function randomMemory() {
+  const idx = memoryIndex % memories.length;
+  memoryIndex++;
+  return memories[idx];
+}
+
+let surpriseIndex = 0;
+function randomSurprise() {
+  const idx = surpriseIndex % surpriseThemes.length;
+  surpriseIndex++;
+  return surpriseThemes[idx];
+}
+
+// ===== 按钮交互 =====
+document.getElementById('btnLoveWords').addEventListener('click', function(e) {
+  this.style.transform = 'scale(0.95)';
+  setTimeout(() => { this.style.transform = ''; }, 150);
+  const word = loveWords[randInt(0, loveWords.length - 1)];
+  document.getElementById('loveWordText').textContent = word;
+  document.getElementById('lovePopup').classList.add('show');
+});
+
+document.getElementById('lovePopupBtn').addEventListener('click', function() {
+  document.getElementById('lovePopup').classList.remove('show');
+});
+
+document.getElementById('btnMemories').addEventListener('click', function(e) {
+  this.style.transform = 'scale(0.95)';
+  setTimeout(() => { this.style.transform = ''; }, 150);
+  const mem = randomMemory();
+  const days = daysBetween(mem.date);
+  document.getElementById('memoryTitle').textContent = mem.title;
+  document.getElementById('memoryDaysBadge').textContent = days + ' 天';
+  document.getElementById('memoryText').textContent = mem.text || '';
+  const sceneImg = document.getElementById('memorySceneImg');
+  if (mem.image) {
+    sceneImg.src = 'scene_images/' + mem.image;
+    sceneImg.style.display = 'block';
+  } else {
+    sceneImg.style.display = 'none';
+  }
+  document.getElementById('memoryPopup').classList.add('show');
+});
+
+document.getElementById('memoryPopupBtn').addEventListener('click', function() {
+  document.getElementById('memoryPopup').classList.remove('show');
+});
+
+document.getElementById('btnSurprise').addEventListener('click', function(e) {
+  this.style.transform = 'scale(0.95)';
+  setTimeout(() => { this.style.transform = ''; }, 150);
+  const theme = randomSurprise();
+  setTimeout(() => { showSurprise(theme); }, 150);
+});
+
+// ===== 惊喜页面 =====
+const surpriseContainer = document.getElementById('surpriseContainer');
+const surpriseCanvas = document.getElementById('surpriseCanvas');
+const surpriseMsg = document.getElementById('surpriseMsg');
+const ctx = surpriseCanvas.getContext('2d');
+
+let particles = [];
+let animFrame = null;
+let currentTheme = null;
+let surpriseShown = false;
+let messageTimer = null;
+
+function showSurprise(theme) {
+  currentTheme = theme;
+  surpriseContainer.className = 'surprise show ' + theme.cls;
+  surpriseShown = false;
+  particles = [];
+  if (messageTimer) clearTimeout(messageTimer);
+  
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    initParticles(theme);
+    const delay = getMessageDelay(theme.key);
+    messageTimer = setTimeout(() => {
+      showSurpriseMessage(theme);
+    }, delay);
+    animate();
+  });
+}
+
+function getMessageDelay(key) {
+  const map = {
+    sakura: 1000,
+    lantern: 2000,
+    meteor: 2000,
+    magpie: 2000,
+    firework: 2500,
+    redthread: 1200,
+    galaxy: 2000,
+    flower: 2000
+  };
+  return map[key] || 1500;
+}
+
+function hideSurprise() {
+  surpriseMsg.classList.remove('show');
+  setTimeout(() => {
+    if (animFrame) cancelAnimationFrame(animFrame);
+    surpriseContainer.classList.remove('show');
+    surpriseContainer.className = 'surprise';
+    const w = surpriseContainer.offsetWidth;
+    const h = surpriseContainer.offsetHeight;
+    ctx.clearRect(0, 0, w, h);
+    particles = [];
+    if (messageTimer) { clearTimeout(messageTimer); messageTimer = null; }
+    currentTheme = null;
+  }, 200);
+}
+
+function showSurpriseMessage(theme) {
+  surpriseShown = true;
+  document.getElementById('smIcon').textContent = theme.icon;
+  document.getElementById('smTitle').textContent = theme.title;
+  document.getElementById('smBody').textContent = theme.body;
+  document.getElementById('smBtn').textContent = theme.btn;
+  const btn = document.getElementById('smBtn');
+  btn.style.background = getBtnGradient(theme.key);
+  document.getElementById('smDivider').style.background = getDividerColor(theme.key);
+  surpriseMsg.classList.add('show');
+}
+
+function getBtnGradient(key) {
+  const map = {
+    sakura: 'linear-gradient(90deg,#f25779,#e880aa)',
+    lantern: 'linear-gradient(90deg,#e64026,#f28b40)',
+    meteor: 'linear-gradient(90deg,#4d7ad9,#8058cc)',
+    magpie: 'linear-gradient(90deg,#8c59bf,#cc5999)',
+    firework: 'linear-gradient(90deg,#f2406e,#e880a6)',
+    redthread: 'linear-gradient(90deg,#d92640,#ff728c)',
+    galaxy: 'linear-gradient(90deg,#4d2699,#8c59d9)',
+    flower: 'linear-gradient(90deg,#d94080,#ff8cb2)'
+  };
+  return map[key] || map.sakura;
+}
+
+function getDividerColor(key) {
+  const map = {
+    sakura: 'rgba(242,87,121,0.4)',
+    lantern: 'rgba(230,64,38,0.4)',
+    meteor: 'rgba(77,122,217,0.4)',
+    magpie: 'rgba(140,89,191,0.4)',
+    firework: 'rgba(242,64,110,0.4)',
+    redthread: 'rgba(217,38,64,0.4)',
+    galaxy: 'rgba(77,38,153,0.4)',
+    flower: 'rgba(217,64,128,0.4)'
+  };
+  return map[key] || map.sakura;
+}
+document.getElementById('smBtn').addEventListener('click', hideSurprise);
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = surpriseContainer.offsetWidth;
+  const h = surpriseContainer.offsetHeight;
+  surpriseCanvas.style.width = w + 'px';
+  surpriseCanvas.style.height = h + 'px';
+  surpriseCanvas.width = w * dpr;
+  surpriseCanvas.height = h * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+}
+
+// ===== 粒子系统 =====
+function initParticles(theme) {
+  const w = surpriseCanvas.offsetWidth;
+  const h = surpriseCanvas.offsetHeight;
+  
+  switch (theme.key) {
+    case 'sakura': initSakura(w, h); break;
+    case 'lantern': initLantern(w, h); break;
+    case 'meteor': initMeteor(w, h); break;
+    case 'magpie': initMagpie(w, h); break;
+    case 'firework': initFirework(w, h); break;
+    case 'redthread': initRedThread(w, h); break;
+    case 'galaxy': initGalaxy(w, h); break;
+    case 'flower': initFlower(w, h); break;
+  }
+}
+function animate() {
+  if (!surpriseContainer.classList.contains('show')) return;
+  const w = surpriseCanvas.offsetWidth;
+  const h = surpriseCanvas.offsetHeight;
+  ctx.clearRect(0, 0, w, h);
+  
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update(i, w, h);
+    if (p.dead) { particles.splice(i, 1); continue; }
+    p.draw();
+  }
+  
+  // 生成新粒子
+  spawnNewParticles();
+  
+  animFrame = requestAnimationFrame(animate);
+}
+
+function spawnNewParticles() {
+  const w = surpriseCanvas.offsetWidth;
+  const h = surpriseCanvas.offsetHeight;
+  if (!currentTheme || surpriseShown) return;
+  
+  switch (currentTheme.key) {
+    case 'sakura':
+      if (Math.random() < 0.5) particles.push(createPetal(w));
+      if (Math.random() < 0.3) particles.push(createHeart(w, h));
+      break;
+    case 'lantern':
+      if (Math.random() < 0.4) particles.push(createLantern(w, h));
+      break;
+    case 'meteor':
+      if (Math.random() < 0.04) particles.push(createMeteor(w, h));
+      break;
+    case 'magpie':
+      if (Math.random() < 0.5) particles.push(createMagpie(w, h));
+      break;
+    case 'firework':
+      if (Math.random() < 0.08) createFirework(w, h);
+      break;
+    case 'redthread':
+      if (Math.random() < 0.3) particles.push(createThread(w, h));
+      if (Math.random() < 0.1) particles.push(createKnot(w));
+      break;
+    case 'galaxy':
+      if (Math.random() < 0.02) particles.push(createShootingStar(w, h));
+      break;
+    case 'flower':
+      if (Math.random() < 0.3) particles.push(createFlowerPetal(w));
+      if (Math.random() < 0.15) particles.push(createFlowerHeart(w, h));
+      break;
+  }
+}
+
+// ===== 樱花 =====
+function createPetal(w) {
+  return {
+    x: rand(0, w), y: -20,
+    vx: 0, vy: rand(0.5, 1.5),
+    size: rand(8, 18),
+    color: `hsla(${randInt(330,350)}, 80%, ${randInt(75,90)}%, 0.85)`,
+    rot: rand(0, Math.PI * 2),
+    vr: rand(-0.05, 0.05),
+    dead: false,
+    update(i, w, h) {
+      this.x += Math.sin(this.y * 0.02 + i) * 0.5 + rand(-0.3, 0.3);
+      this.y += this.vy;
+      this.rot += this.vr;
+      if (this.y > h + 30) this.dead = true;
+    },
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot);
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  };
+}
+
+function createHeart(w, h) {
+  return {
+    x: rand(20, w - 20), y: h + 20,
+    vx: rand(-0.5, 0.5), vy: rand(-2, -0.5),
+    size: rand(10, 20),
+    color: `hsla(${randInt(340,360)}, 85%, ${randInt(60,75)}%, 0.8)`,
+    dead: false,
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += 0.01;
+      if (this.y < -30) this.dead = true;
+    },
+    draw() { drawHeart(this.x, this.y, this.size, this.color); }
+  };
+}
+
+function drawHeart(x, y, size, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  const s = size / 16;
+  ctx.moveTo(0, 4*s);
+  ctx.bezierCurveTo(0, -4*s, -16*s, -4*s, -16*s, 4*s);
+  ctx.bezierCurveTo(-16*s, 10*s, -8*s, 16*s, 0, 20*s);
+  ctx.bezierCurveTo(8*s, 16*s, 16*s, 10*s, 16*s, 4*s);
+  ctx.bezierCurveTo(16*s, -4*s, 0, -4*s, 0, 4*s);
+  ctx.fill();
+  ctx.restore();
+}
+
+// ===== 孔明灯 =====
+function createLantern(w, h) {
+  const x = rand(50, w - 50);
+  const targetY = rand(h * 0.1, h * 0.4);
+  return {
+    x: x, y: h + 30,
+    startX: x, targetX: x + rand(-40, 40),
+    targetY: targetY,
+    progress: 0,
+    color: `hsl(${randInt(20,35)}, 90%, 60%)`,
+    dead: false,
+    update() {
+      this.progress += 0.008;
+      if (this.progress >= 1) this.dead = true;
+      this.x = this.startX + (this.targetX - this.startX) * this.progress;
+      this.y = h + 30 + (this.targetY - h - 30) * easeInOut(this.progress);
+    },
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      // 灯光
+      const g = ctx.createRadialGradient(0, -15, 5, 0, -15, 35);
+      g.addColorStop(0, 'rgba(255,200,100,0.9)');
+      g.addColorStop(1, 'rgba(255,100,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(-35, -50, 70, 70);
+      // 灯体
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 18, 22, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // 火焰
+      ctx.fillStyle = '#ffdd66';
+      ctx.beginPath();
+      ctx.ellipse(0, -20, 5, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  };
+}
+
+function easeInOut(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t) * t; }
+
+// ===== 流星 =====
+function createMeteor(w, h) {
+  const startX = rand(0, w * 0.6);
+  const startY = rand(0, h * 0.3);
+  const angle = rand(Math.PI * 0.15, Math.PI * 0.35);
+  const speed = rand(4, 7);
+  return {
+    x: startX, y: startY,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    trail: [],
+    dead: false,
+    update() {
+      this.trail.push({x: this.x, y: this.y});
+      if (this.trail.length > 12) this.trail.shift();
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x > w + 50 || this.y > h + 50) this.dead = true;
+    },
+    draw() {
+      // 尾迹
+      for (let i = 0; i < this.trail.length; i++) {
+        const t = this.trail[i];
+        const alpha = i / this.trail.length * 0.8;
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 2 + i * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // 头部
+      ctx.fillStyle = '#fff';
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  };
+}
+
+// ===== 鹊桥 =====
+function createMagpie(w, h) {
+  return {
+    x: -40, y: rand(h * 0.25, h * 0.55),
+    targetX: rand(w * 0.2, w * 0.8),
+    speed: rand(1, 2),
+    wingPhase: 0,
+    dead: false,
+    update() {
+      this.wingPhase += 0.3;
+      this.x += this.speed;
+      if (this.x > this.targetX) this.dead = true;
+    },
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.fillStyle = '#2a1a3a';
+      ctx.font = `${randInt(14,22)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const wingOffset = Math.sin(this.wingPhase) * 4;
+      ctx.fillText('🕊', 0, wingOffset);
+      ctx.restore();
+    }
+  };
+}
+
+// ===== 烟花 =====
+function createFirework(w, h) {
+  const x = rand(w * 0.15, w * 0.85);
+  const y = rand(h * 0.15, h * 0.5);
+  const hue = randInt(0, 360);
+  const count = randInt(30, 50);
+  
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i;
+    const speed = rand(40, 100);
+    particles.push({
+      x: x, y: y,
+      vx: Math.cos(angle) * speed * 0.05,
+      vy: Math.sin(angle) * speed * 0.05,
+      color: `hsl(${hue + randInt(-10,10)}, 90%, ${randInt(55,70)}%)`,
+      life: 1,
+      decay: rand(0.015, 0.03),
+      size: rand(1.5, 3),
+      dead: false,
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.02;
+        this.life -= this.decay;
+        if (this.life <= 0) this.dead = true;
+      },
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.life;
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    });
+  }
+  
+  // 闪光
+  particles.push({
+    x: x, y: y, maxR: 40,
+    r: 0, alpha: 1,
+    dead: false,
+    update() {
+      this.r += 2;
+      this.alpha -= 0.04;
+      if (this.alpha <= 0) this.dead = true;
+    },
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+      g.addColorStop(0, `hsla(${hue},100%,80%,0.8)`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  });
+}
+
+// ===== 红线缘 =====
+function createThread(w, h) {
+  const sx = rand(50, w - 50);
+  const ex = rand(50, w - 50);
+  const cy = h * 0.3;
+  const progress = 0;
+  return {
+    sx: sx, ex: ex, cy: cy, h: h,
+    progress: 0,
+    threadPath: [],
+    dead: false,
+    update() {
+      this.progress += 0.008;
+      if (this.progress >= 1) {
+        this.dead = true;
+        return;
+      }
+      this.threadPath = [];
+      const numPts = 20;
+      for (let i = 0; i <= numPts; i++) {
+        const t = i / numPts * this.progress;
+        const px = this.sx + (this.ex - this.sx) * t;
+        const py = this.h - 10 + (this.cy - this.h + 10) * Math.sin(t * Math.PI);
+        this.threadPath.push({x: px, y: py});
+      }
+    },
+    draw() {
+      if (this.threadPath.length < 2) return;
+      ctx.strokeStyle = 'rgba(255,80,100,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(this.threadPath[0].x, this.threadPath[0].y);
+      for (let i = 1; i < this.threadPath.length; i++) {
+        ctx.lineTo(this.threadPath[i].x, this.threadPath[i].y);
+      }
+      ctx.stroke();
+    }
+  };
+}
+
+function createKnot(w) {
+  return {
+    x: rand(20, w - 20), y: -10,
+    targetY: rand(100, 250),
+    progress: 0,
+    dead: false,
+    update() {
+      this.progress += 0.005;
+      if (this.progress >= 1) this.dead = true;
+      this.y = -10 + (this.targetY - -10) * easeInOut(this.progress);
+    },
+    draw() {
+      ctx.fillStyle = 'rgba(255,40,60,0.9)';
+      ctx.beginPath();
+      ctx.moveTo(this.x - 3, this.y - 6);
+      ctx.lineTo(this.x + 3, this.y - 6);
+      ctx.lineTo(this.x + 3, this.y + 6);
+      ctx.lineTo(this.x - 3, this.y + 6);
+      ctx.closePath();
+      ctx.fill();
+    }
+  };
+}
+
+// ===== 银河 =====
+function createShootingStar(w, h) {
+  const startX = rand(-50, w * 0.3);
+  const startY = rand(h * 0.1, h * 0.4);
+  return {
+    x: startX, y: startY,
+    vx: rand(4, 7), vy: rand(3, 5),
+    trail: [],
+    dead: false,
+    update() {
+      this.trail.push({x: this.x, y: this.y});
+      if (this.trail.length > 20) this.trail.shift();
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x > w + 50 || this.y > h + 50) this.dead = true;
+    },
+    draw() {
+      for (let i = 0; i < this.trail.length; i++) {
+        const t = this.trail[i];
+        const alpha = i / this.trail.length * 0.9;
+        const size = (i / this.trail.length) * 3 + 0.5;
+        ctx.fillStyle = `rgba(200,150,255,${alpha})`;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fff';
+      ctx.shadowColor = '#d0a0ff';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  };
+}
+
+function initGalaxy(w, h) {
+  // 添加星星
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      star: true,
+      x: rand(0, w), y: rand(0, h),
+      size: rand(1, 3),
+      alpha: rand(0.3, 1),
+      twinkleSpeed: rand(0.01, 0.04),
+      dead: false,
+      update() {
+        this.alpha += this.twinkleSpeed * (Math.random() > 0.5 ? 1 : -1);
+        this.alpha = Math.max(0.1, Math.min(1, this.alpha));
+      },
+      draw() {
+        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  }
+}
+
+// ===== 花海 =====
+function createFlowerPetal(w) {
+  return {
+    x: rand(0, w), y: -20,
+    vx: rand(-0.5, 0.5), vy: rand(0.5, 1.5),
+    size: rand(8, 15),
+    color: `hsl(${randInt(320,360)}, 70%, ${randInt(70,85)}%)`,
+    rot: rand(0, Math.PI * 2),
+    vr: rand(-0.03, 0.03),
+    dead: false,
+    update(w, h) {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.rot += this.vr;
+      if (this.y > h + 20) this.dead = true;
+    },
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot);
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * 0.7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  };
+}
+
+function createFlowerHeart(w, h) {
+  return {
+    x: rand(20, w - 20), y: h + 10,
+    vx: rand(-0.3, 0.3), vy: rand(-2, -1),
+    size: rand(8, 14),
+    color: `hsl(${randInt(330,350)}, 80%, ${randInt(55,70)}%)`,
+    dead: false,
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.y < -20) this.dead = true;
+    },
+    draw() { drawHeart(this.x, this.y, this.size, this.color); }
+  };
+}
+
+function initFlower(w, h) {
+  for (let i = 0; i < 20; i++) {
+    particles.push(createFlowerPetal(w));
+  }
+  for (let i = 0; i < 8; i++) {
+    particles.push(createFlowerHeart(w, h));
+  }
+}
+
+function initSakura(w, h) {
+  for (let i = 0; i < 15; i++) {
+    particles.push(createPetal(w));
+  }
+  for (let i = 0; i < 5; i++) {
+    particles.push(createHeart(w, h));
+  }
+}
+
+function initLantern(w, h) {
+  for (let i = 0; i < 5; i++) {
+    particles.push(createLantern(w, h));
+  }
+}
+
+function initMeteor(w, h) {
+  for (let i = 0; i < 3; i++) {
+    particles.push(createMeteor(w, h));
+  }
+}
+
+function initMagpie(w, h) {
+  for (let i = 0; i < 8; i++) {
+    particles.push(createMagpie(w, h));
+  }
+}
+
+function initFirework(w, h) {
+  for (let i = 0; i < 2; i++) {
+    createFirework(w, h);
+  }
+}
+
+function initRedThread(w, h) {
+  for (let i = 0; i < 5; i++) {
+    particles.push(createThread(w, h));
+  }
+  for (let i = 0; i < 3; i++) {
+    particles.push(createKnot(w));
+  }
+}
+
+// ===== 点击遮罩关闭弹窗 =====
+document.getElementById('lovePopup').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+document.getElementById('memoryPopup').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+
+// ===== Canvas 尺寸调整 =====
+window.addEventListener('resize', () => {
+  if (surpriseContainer.classList.contains('show')) {
+    resizeCanvas();
+  }
+});
+
+</script>
+</body>
+</html>
